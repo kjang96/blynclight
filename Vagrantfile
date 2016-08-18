@@ -2,6 +2,8 @@ ENV["VAGRANT_DEFAULT_PROVIDER"] = "parallels"
 
 Vagrant.configure(2) do |config|
 
+  #config.vm.network :public_network
+	
   config.ssh.forward_agent = true
 
   config.vm.synced_folder ".", "/vagrant"

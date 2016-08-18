@@ -23,8 +23,14 @@ from flask import Flask, redirect, url_for, request
 
 app = Flask(__name__)
 
+@app.route("/", methods=['POST', 'GET'])
+def root():
+	print('why you do this')
+	return 'somewhat OK\n'
+
 @app.route("/blynclight/<string:mode>/<string:color>/<int:iterations>", methods = ['POST'])
 def trigger(mode, color, iterations):
+	print("general function called")
 	options = {'pulse': blynclight.pulseServer,
 		'cycle': blynclight.cycleServer,
 		'flash': blynclight.flashServer
@@ -35,7 +41,13 @@ def trigger(mode, color, iterations):
 
 @app.route("/blynclight/flash/<string:color>/", methods = ['POST'])
 def flash(color): 
+	print("flash called")
 	return redirect(url_for('trigger', mode='pulse', color=color, iterations=1))
+
+@app.route("/blynclight/cycle/", methods = ['POST'])
+def cycle():
+	print("cycled")
+	return redirect(url_for('trigger', mode='cycle', color = None, iterations=None))
 
 if __name__ == "__main__": 
 	app.run(host='0.0.0.0')
