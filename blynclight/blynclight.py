@@ -61,22 +61,8 @@ class Blynclight(object):
 		self.dev.ctrl_transfer(0x21, 0x9, 0x0200, 0, d, 0)
 		print("ending")
 
-def cycle(args):
-	"""Cycle through red, blue, green colors"""
-	bl = Blynclight()
-	t = 0.0
-	refresh = 0.017
-	while True:
-		t += args.speed*refresh
-		r = int(256 * pow(sin(t        ), 8))
-		b = int(256 * pow(sin(t+0.66*pi), 8))
-		g = int(256 * pow(sin(t+0.33*pi), 8))
-		if args.verbose: print("%d,%d,%d" % (r,b,g))
-		bl.set_rbg(r, b, g)
-		sleep(refresh)
 
-#added the below (yay)
-def cycleServer(speed=0.5, mode=None):
+def cycleServer(color, iterations, speed=0.5):
 	bl = Blynclight()
 	t = 0.0
 	refresh = 0.017
@@ -85,7 +71,7 @@ def cycleServer(speed=0.5, mode=None):
 		r = int(256 * pow(sin(t        ), 8))
 		b = int(256 * pow(sin(t+0.66*pi), 8))
 		g = int(256 * pow(sin(t+0.33*pi), 8))
-		if mode == "verbose": print("%d,%d,%d" % (r,b,g))
+		# if mode == "verbose": print("%d,%d,%d" % (r,b,g))
 		bl.set_rbg(r, b, g)
 		sleep(refresh)
 
@@ -95,26 +81,6 @@ def color(args):
 	bl = Blynclight()
 	bl.set_rbg(int(args.red), int(args.blue), int(args.green))
 
-def pulse(args):
-	"""Pulse a specific color"""
-	bl = Blynclight()
-	t = 0.0
-	refresh = 0.017
-	i = 0
-	while True:
-		t += args.speed*refresh
-		scale = pow(sin(t),2)
-		r = int(args.red * scale)
-		b = int(args.blue * scale)
-		g = int(args.green * scale)
-		if args.verbose: print("%d,%d,%d" % (r,b,g))
-		bl.set_rbg(r, b, g)
-		sleep(refresh)
-		if t > pi:
-			t = 0
-			i += 1
-		if args.iterations > 0 and i >= args.iterations:
-			return
 
 def pulseServer(color, speed=0.5, iterations=3):
 	"""Pulse a specific color"""
@@ -124,11 +90,17 @@ def pulseServer(color, speed=0.5, iterations=3):
 	# i = 0
 	while iterations > 0:
 		if color == "red": 
+			print('RED')
 			r, g, b = 255, 0 , 0
 		if color == "green": 
+			print('GREEN')
 			r, g, b = 0, 255, 0
-		if color == "blue": 
+		if color == "blue":
+			print('BLUE') 
 			r, g, b = 0, 0, 255
+		if color == "orange":
+			print('ORANGE')
+			r, g, b = 255, 30, 0
 		bl.set_rbg(r, b, g)
 		sleep(speed)
 		bl.set_rbg(0, 0, 0)
@@ -144,6 +116,9 @@ def flashServer(color, speed=0.5, iterations=0):
 		r, g, b = 0, 255, 0
 	if color == "blue": 
 		r, g, b = 0, 0, 255
+	if color == "orange":
+		print("ORANGE")
+		r, g, b = 255, 20, 0
 	bl.set_rbg(r, g, b,)
 	bl.set_rbg(0, 0, 0)
 	return
