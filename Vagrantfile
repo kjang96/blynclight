@@ -19,7 +19,7 @@ sudo apt-get update
 sudo apt-get install -y python-setuptools python-dev build-essential
 sudo easy_install pip
 sudo pip install pyusb
-sudo pip install Flask &
+sudo pip install Flask
 SCRIPT
 
   config.vm.provision "shell", inline: $script
