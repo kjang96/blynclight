@@ -19,9 +19,11 @@ sudo apt-get update
 sudo apt-get install -y python-setuptools python-dev build-essential
 sudo easy_install pip
 sudo pip install pyusb
-sudo pip install Flask
-sudo python /vagrant/blynclight/server.py &
+sudo pip install Flask &
 SCRIPT
 
   config.vm.provision "shell", inline: $script
+  config.vm.provision "shell", run: "always", privileged: false do |s|
+    s.inline = "sudo python /vagrant/blynclight/server.py &"
+  end
 end
